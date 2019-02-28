@@ -9,6 +9,10 @@
 #include "serial.h"
 #include "library.h"
 
+
+bool live_hardware = false;
+bool do_sound=false;
+
 int ProcessFile(int );
 int Playsound(int );
 bool fileExists(const char* file);
@@ -24,7 +28,10 @@ int main(int argc, char *argv[])
   int inttime;
   int intlastcheck;
   
-  Rig.Initialise();
+    if(argc>1) do_sound=1;
+  
+    if(live_hardware) Rig.Initialise();
+
 
     while(1)
     {
@@ -46,7 +53,6 @@ int main(int argc, char *argv[])
         printf("%4d Checking.\n",inttime);
         intlastcheck = inttime;
         
-		inttime = 2330;
         ProcessFile(inttime);
         Playsound(inttime);            
         
