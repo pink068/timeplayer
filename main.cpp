@@ -11,7 +11,7 @@
 
 
 bool live_hardware = false;
-bool do_sound=false;
+bool do_sound=true;
 
 int ProcessFile(int );
 int Playsound(int );
@@ -28,7 +28,14 @@ int main(int argc, char *argv[])
   int inttime;
   int intlastcheck;
   
-    if(argc>1) do_sound=1;
+    if(argc>1) 
+    {
+		do_sound=true;
+		inttime=0000;
+		ProcessFile(inttime);
+        Playsound(inttime);  
+        exit(0);
+	}
   
     if(live_hardware) Rig.Initialise();
 
@@ -52,7 +59,8 @@ int main(int argc, char *argv[])
         // not done. do it
         printf("%4d Checking.\n",inttime);
         intlastcheck = inttime;
-        
+
+
         ProcessFile(inttime);
         Playsound(inttime);            
         

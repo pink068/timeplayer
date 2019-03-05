@@ -38,7 +38,7 @@ int ProcessLine(string line)
 
 		case 'C':
 		  cout << "---- Saying Callsign" << endl; 
-	      if(live_hardware) system("aplay callsign.wav");
+	      if(do_sound) system("aplay resources/callsign.wav");
 		  break;
 		  
 		default:
@@ -87,25 +87,24 @@ int ProcessScript(char * filename)
 int ProcessFile(int entrytime)
 {
   char filename[20];
-  printf("%4d Running commands\n",entrytime);
+ // printf("%4d Running commands\n",entrytime);
 
-  sprintf(filename,"%4d.txt",entrytime);
-  strcpy(filename,"2359.txt");
+  sprintf(filename,"resources/%4d.txt",entrytime);
   if (fileExists(filename))
   {  
 	ProcessScript(filename);
   }
   else
   {
-    printf("%4d No specific to process\n",entrytime);
-    sprintf(filename,"24%2d.txt",entrytime%60);  
+    printf("%4d No specific commands to process\n",entrytime);
+    sprintf(filename,"resources/24%2d.txt",entrytime%60);  
     if (fileExists(filename))
     {  
 	  ProcessScript(filename);
     }
     else
     {
-      printf("%4d No hourly to process\n",entrytime);	  
+      printf("%4d No hourly commands to process\n",entrytime);
     }  
   }
   
@@ -120,7 +119,7 @@ int Playsound(int entrytime)
   char filename[20];
   char commandbuffer[100];
 
-  sprintf(filename,"%4d.wav",entrytime);
+  sprintf(filename,"resources/%4d.wav",entrytime);
 
   if (fileExists(filename))
   {
@@ -133,7 +132,7 @@ int Playsound(int entrytime)
   else
   {
 	printf("%4d No specific sound to play\n",entrytime);
-	sprintf(filename,"24%2d.wav",entrytime%60);  
+	sprintf(filename,"resources/24%2d.wav",entrytime%60);  
 	if (fileExists(filename))
 	{
 	  sprintf(commandbuffer,"aplay -q %s",filename);
@@ -142,6 +141,10 @@ int Playsound(int entrytime)
       if(do_sound) system(commandbuffer);		
 	  
 	}  // end of if exists
+	else
+	{
+      printf("%4d No hourly sound to play\n",entrytime);	  
+    } 
   }   // end of else
 
   return 0;  
