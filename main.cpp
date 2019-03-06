@@ -11,7 +11,7 @@
 
 
 bool live_hardware = false;
-bool do_sound=true;
+bool do_sound=false;
 
 int ProcessFile(int );
 int Playsound(int );
@@ -30,8 +30,9 @@ int main(int argc, char *argv[])
   
     if(argc>1) 
     {
-		do_sound=true;
-		inttime=0000;
+//		do_sound=true;
+//		strcpy(entrytime,argv[1]);
+		inttime=atoi(argv[1]);
 		ProcessFile(inttime);
         Playsound(inttime);  
         exit(0);

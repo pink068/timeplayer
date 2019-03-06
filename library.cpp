@@ -9,6 +9,7 @@
 #include <unistd.h>
 #include "serial.h"
 #include "library.h"
+#include <time.h>
 
 using namespace std;
 int ProcessScript(char * filename);
@@ -17,6 +18,32 @@ extern bool live_hardware ;
 extern bool do_sound;
 extern RadioControl Rig;
 
+int MakeTimeFile(void);
+int WriteToFile(char * buffer, char * filename);
+
+
+
+
+int MakeTimeFile(void)
+{
+	// get current time
+	// convert to wav
+	struct tm * mytime;
+	time_t mysecs;
+	char buffer[200];
+	
+	mysecs = time(NULL);
+	mytime = gmtime(&mysecs);
+
+	sprintf(buffer, "The time is %2d %2d and %2d seconds",mytime->tm_hour, mytime->tm_min, mytime->tm_sec);
+    WriteToFile(buffer, (char *) "time.txt");
+	system("text2wave -o time.wav time.txt");
+	
+ return 0;
+}
+
+
+
 int ProcessLine(string line)
 {
 	char localbuffer[20];
@@ -24,7 +51,12 @@ int ProcessLine(string line)
 	
 	switch (line.front())
 	{
-		case 'F':
+		case 'C':
+		  cout << "---- Saying Callsign" << endl; 
+	      if(do_sound) system("aplay resources/callsign.wav");
+		  break;
+		  
+	    case 'F':
 		  cout << "---- Changing Frequency "; 
 		  cout << localbuffer << endl;
           if(live_hardware)   Rig.Command( RADIO_FREQ, localbuffer);
@@ -36,9 +68,11 @@ int ProcessLine(string line)
           if(live_hardware)   Rig.Command( RADIO_POWER, localbuffer);
 		  break;
 
-		case 'C':
-		  cout << "---- Saying Callsign" << endl; 
-	      if(do_sound) system("aplay resources/callsign.wav");
+
+		case 'T':
+		  cout << "---- Saying Time" << endl; 
+		  MakeTimeFile();
+	      if(do_sound) system("aplay resources/time.wav");
 		  break;
 		  
 		default:
@@ -87,16 +121,16 @@ int ProcessScript(char * filename)
 int ProcessFile(int entrytime)
 {
   char filename[20];
- // printf("%4d Running commands\n",entrytime);
+ // printf("%04d Running commands\n",entrytime);
 
-  sprintf(filename,"resources/%4d.txt",entrytime);
+  sprintf(filename,"resources/%04d.txt",entrytime);
   if (fileExists(filename))
   {  
 	ProcessScript(filename);
   }
   else
   {
-    printf("%4d No specific commands to process\n",entrytime);
+    printf("%04d No specific commands to process\n",entrytime);
     sprintf(filename,"resources/24%2d.txt",entrytime%60);  
     if (fileExists(filename))
     {  
@@ -104,7 +138,7 @@ int ProcessFile(int entrytime)
     }
     else
     {
-      printf("%4d No hourly commands to process\n",entrytime);
+      printf("%04d No hourly commands to process\n",entrytime);
     }  
   }
   
@@ -119,31 +153,31 @@ int Playsound(int entrytime)
   char filename[20];
   char commandbuffer[100];
 
-  sprintf(filename,"resources/%4d.wav",entrytime);
+  sprintf(filename,"resources/%04d.wav",entrytime);
 
   if (fileExists(filename))
   {
-	sprintf(commandbuffer,"aplay -q %4d.wav",entrytime);
-	printf("%4d Playing\[%s]\n",entrytime,commandbuffer);	
+	sprintf(commandbuffer,"aplay -q %04d.wav",entrytime);
+	printf("%04d Playing\[%s]\n",entrytime,commandbuffer);	
 
 	if(do_sound) system(commandbuffer);
 	
   }
   else
   {
-	printf("%4d No specific sound to play\n",entrytime);
-	sprintf(filename,"resources/24%2d.wav",entrytime%60);  
+	printf("%04d No specific sound to play\n",entrytime);
+	sprintf(filename,"resources/24%02d.wav",entrytime%60);  
 	if (fileExists(filename))
 	{
 	  sprintf(commandbuffer,"aplay -q %s",filename);
-      printf("%4d Playing hourly [%s]\n",entrytime,commandbuffer );	
+      printf("%04d Playing hourly [%s]\n",entrytime,commandbuffer );	
 
       if(do_sound) system(commandbuffer);		
 	  
 	}  // end of if exists
 	else
 	{
-      printf("%4d No hourly sound to play\n",entrytime);	  
+      printf("%04d No hourly sound to play\n",entrytime);	  
     } 
   }   // end of else
 
@@ -155,3 +189,12 @@ bool fileExists(const char* file) {
     return (stat(file, &buf) == 0);
 }
 
+
+int WriteToFile(char * buffer, char * filename)
+{
+	ofstream myfile;
+	myfile.open (filename);
+    myfile << buffer;
+    myfile.close();
+    return 0;	
+}
