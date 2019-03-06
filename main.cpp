@@ -9,13 +9,11 @@
 #include "serial.h"
 #include "library.h"
 
-
+using namespace std;
 bool live_hardware = false;
 bool do_sound=false;
 
-int ProcessFile(int );
-int Playsound(int );
-bool fileExists(const char* file);
+
 
 RadioControl Rig;
 

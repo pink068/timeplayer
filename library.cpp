@@ -12,48 +12,51 @@
 #include <time.h>
 
 using namespace std;
-int ProcessScript(char * filename);
-int ProcessLine(string line);
-extern bool live_hardware ;
-extern bool do_sound;
-extern RadioControl Rig;
-
-int MakeTimeFile(void);
-int WriteToFile(char * buffer, char * filename);
 
 
-
-
-int MakeTimeFile(void)
+int MakeDTGFile(void)
 {
 	// get current time
 	// convert to wav
 	struct tm * mytime;
 	time_t mysecs;
 	char buffer[200];
+	char tbuffer[200];
 	
 	mysecs = time(NULL);
 	mytime = gmtime(&mysecs);
 
-	sprintf(buffer, "The time is %2d %2d and %2d seconds",mytime->tm_hour, mytime->tm_min, mytime->tm_sec);
-    WriteToFile(buffer, (char *) "time.txt");
-	system("text2wave -o time.wav time.txt");
+	strftime(tbuffer, 20, "%d%H%M", mytime);
+	sprintf(buffer,"%c %c %c %c %c %c ", tbuffer[0],tbuffer[1],tbuffer[2],tbuffer[3],tbuffer[4],tbuffer[5]);
+	
+	strftime(tbuffer, 20, "%B", mytime);	
+	strcat(buffer,tbuffer);
+//	cout << buffer << endl;	
+		
+    WriteToFile(buffer, (char *) "resources/dtg.txt");
+	system("text2wave -o resources/dtg.wav resources/dtg.txt");
 	
  return 0;
 }
 
 
 
-int ProcessLine(string line)
+int ProcessLine(char * line)
 {
-	char localbuffer[20];
-	line.copy(localbuffer,18,1);	
+	char localbuffer[200];
+    strncpy(localbuffer,&line[1],20);	
 	
-	switch (line.front())
+	switch (line[0])
 	{
 		case 'C':
 		  cout << "---- Saying Callsign" << endl; 
 	      if(do_sound) system("aplay resources/callsign.wav");
+		  break;
+
+		case 'D':
+		  cout << "---- Saying DTG" << endl; 
+		  MakeDTGFile();
+	      if(do_sound) system("aplay resources/dtg.wav");
 		  break;
 		  
 	    case 'F':
@@ -74,6 +77,8 @@ int ProcessLine(string line)
 		  MakeTimeFile();
 	      if(do_sound) system("aplay resources/time.wav");
 		  break;
+
+
 		  
 		default:
 		  cout << "Letter not recognised\n"; 
@@ -105,7 +110,7 @@ int ProcessScript(char * filename)
   {
     while ( getline (myfile,line) )
     {
-	  ProcessLine(line);
+	  ProcessLine((char*)line.c_str());
       
     }
     myfile.close();
@@ -198,3 +203,22 @@ int WriteToFile(char * buffer, char * filename)
     myfile.close();
     return 0;	
 }
+
+int MakeTimeFile(void)
+{
+	// get current time
+	// convert to wav
+	struct tm * mytime;
+	time_t mysecs;
+	char buffer[200];
+	
+	mysecs = time(NULL);
+	mytime = gmtime(&mysecs);
+
+	sprintf(buffer, "%2d %2d and %2d seconds",mytime->tm_hour, mytime->tm_min, mytime->tm_sec);
+    WriteToFile(buffer, (char *) "resources/time.txt");
+	system("text2wave -o resources/dtg.wav resources/time.txt");
+	
+ return 0;
+}
+
