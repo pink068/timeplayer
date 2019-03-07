@@ -25,13 +25,8 @@ int MakeTimeFile(void)
 	
 	mysecs = time(NULL);
 	mytime = gmtime(&mysecs);
-
-	sprintf(buffer, "echo \"%2d %02d and %2d seconds\" |text2wave -o resources/time.wav",mytime->tm_hour, mytime->tm_min, mytime->tm_sec);
-	cout << buffer << endl;	
-	system(buffer);
-//    WriteToFile(buffer, (char *) "resources/time.txt");
-//	system("text2wave -o resources/dtg.wav resources/time.txt");
-	
+	sprintf(buffer, "echo \"%2d %02d and %2d seconds\" |text2wave -o resources/nowtime.wav",mytime->tm_hour, mytime->tm_min, mytime->tm_sec);
+	system(buffer);	
  return 0;
 }
 
@@ -46,23 +41,13 @@ int MakeDTGFile(void)
 	time_t mysecs;
 	char buffer[200];
 	char tbuffer[200];
-	char sbuffer[200];
 	
 	mysecs = time(NULL);
 	mytime = gmtime(&mysecs);
 
 	strftime(tbuffer, 20, "%d%H%M", mytime);
-	sprintf(buffer,"TIME %c %c %c %c %c %c ", tbuffer[0],tbuffer[1],tbuffer[2],tbuffer[3],tbuffer[4],tbuffer[5]);
-//	strftime(tbuffer, 20, "%B", mytime);
-    tbuffer[0]=0;	// null the tbuffer
-	
-	sprintf(sbuffer," echo \"%s %s\" |text2wave -o resources/dtg.wav ", buffer, tbuffer);
-	
-	cout << sbuffer << endl;	
-		
-//    WriteToFile(buffer, (char *) "resources/dtg.txt");
-//	system("text2wave -o resources/dtg.wav resources/dtg.txt");
-	system(sbuffer);
+	sprintf(buffer,"sox resources/timeis.wav resources/%c.wav resources/%c.wav resources/%c.wav resources/%c.wav resources/%c.wav resources/%c.wav resources/dtg.wav", tbuffer[0],tbuffer[1],tbuffer[2],tbuffer[3],tbuffer[4],tbuffer[5]);
+	system(buffer);
 	
  return 0;
 }
@@ -78,13 +63,13 @@ int ProcessLine(char * line)
 	{
 		case 'C':
 		  cout << "---- Saying Callsign" << endl; 
-	      if(do_sound) system("aplay resources/callsign.wav");
+	      if(do_sound) system("aplay -q resources/callsign.wav");
 		  break;
 
 		case 'D':
 		  cout << "---- Saying DTG" << endl; 
 		  MakeDTGFile();
-	      if(do_sound) system("aplay resources/dtg.wav");
+	      if(do_sound) system("aplay -q resources/dtg.wav");
 		  break;
 		  
 	    case 'F':
@@ -103,7 +88,7 @@ int ProcessLine(char * line)
 		case 'T':
 		  cout << "---- Saying Time" << endl; 
 		  MakeTimeFile();
-	      if(do_sound) system("aplay resources/time.wav");
+	      if(do_sound) system("aplay -q resources/nowtime.wav");
 		  break;
 
 

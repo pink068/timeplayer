@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
   
     if(argc>1) 
     {
-//		do_sound=true;
+		do_sound=true;
 //		strcpy(entrytime,argv[1]);
 		inttime=atoi(argv[1]);
 		ProcessFile(inttime);
