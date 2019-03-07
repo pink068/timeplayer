@@ -14,31 +14,19 @@
 using namespace std;
 
 
-
-
-
-int SayAsGroups(char * inbuffer)
+int MakeTimeFile(void)
 {
 	// get current time
 	// convert to wav
+	struct tm * mytime;
+	time_t mysecs;
 	char buffer[200];
-	int len;
-	int i;
 	
-	for(int i = 0; inbuffer[i]; i++)
-	{
-      inbuffer[i] = tolower(inbuffer[i]);
-    }
-	
-	len = strlen(inbuffer);
-	strcat(inbuffer,"zzzzz");
-	for (i=0;i<len;i+=5)
-	{
-		strncpy(buffer,&inbuffer[i],5);
-		sprintf(buffer,"sox resources/%c.wav resources/%c.wav resources/%c.wav resources/%c.wav resources/%c.wav resources/silence.wav resources/group.wav", buffer[0],buffer[1],buffer[2],buffer[3],buffer[4]);
-		system(buffer);
-		if(do_sound) system("aplay -q resources/group.wav");
-	}	
+	mysecs = time(NULL);
+	mytime = gmtime(&mysecs);
+	sprintf(buffer, "echo \"%2d %02d and %2d seconds\" |text2wave -o resources/nowtime.wav",mytime->tm_hour, mytime->tm_min, mytime->tm_sec);
+	system(buffer);	
  return 0;
 }
+
 
