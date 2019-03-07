@@ -8,8 +8,9 @@ To get the files just type git clone https://github.com/pink068/TimePlayer<br/>
 Then cd into the TimePlayer Folder<br/>
 To build it just type make.<br />
 To run it just type ./run<br /><br />
-It plays a specific wav file at the specific time. EG plays 21:10 at ten past nine in the eveing. <br/>
-Before playing the wav is runs a script file, if it exists, to set the transmitter frequency and power <br/>
+It plays a specific wav file at the specific time. EG plays 2110.wav at ten past nine in the evening. <br/>
+Before playing the wav is runs a script file, if it exists, to set the transmitter frequency and power <br/> 
+or run other commands. See below.
 
 <br />
 One commnd on each line of the text file.<br/>
