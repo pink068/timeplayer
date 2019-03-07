@@ -10,6 +10,9 @@ int ProcessFile(int );
 int Playsound(int );
 bool fileExists(const char* file);
 
+int SayAsGroups(char *);
+
+
 extern bool live_hardware ;
 extern bool do_sound;
 extern RadioControl Rig;

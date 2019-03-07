@@ -56,7 +56,7 @@ int MakeDTGFile(void)
 
 int ProcessLine(char * line)
 {
-	char localbuffer[200];
+	char localbuffer[2000];
     strncpy(localbuffer,&line[1],20);	
 	
 	switch (line[0])
@@ -71,6 +71,12 @@ int ProcessLine(char * line)
 		  MakeDTGFile();
 	      if(do_sound) system("aplay -q resources/dtg.wav");
 		  break;
+
+		case 'G':
+		  cout << "---- Saying group of 5" << endl; 
+		  SayAsGroups(localbuffer);
+	      
+		  break;	
 		  
 	    case 'F':
 		  cout << "---- Changing Frequency "; 
@@ -141,7 +147,7 @@ int ProcessFile(int entrytime)
   char filename[20];
  // printf("%04d Running commands\n",entrytime);
 
-  sprintf(filename,"resources/%04d.txt",entrytime);
+  sprintf(filename,"scripts/%04d.txt",entrytime);
   if (fileExists(filename))
   {  
 	ProcessScript(filename);
@@ -149,7 +155,7 @@ int ProcessFile(int entrytime)
   else
   {
     printf("%04d No specific commands to process\n",entrytime);
-    sprintf(filename,"resources/24%2d.txt",entrytime%60);  
+    sprintf(filename,"scripts/24%2d.txt",entrytime%60);  
     if (fileExists(filename))
     {  
 	  ProcessScript(filename);
