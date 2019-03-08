@@ -23,7 +23,7 @@ int MakeTimeFile(void)
 	
 	mysecs = time(NULL);
 	mytime = gmtime(&mysecs);
-	sprintf(buffer, "echo \"%2d %02d and %2d seconds\" |text2wave -o nowtime.wav",mytime->tm_hour, mytime->tm_min, mytime->tm_sec);
+	sprintf(buffer, "echo \"%2d %02d and %2d seconds\" |text2wave -o temp.wav",mytime->tm_hour, mytime->tm_min, mytime->tm_sec);
 	system(buffer);	
  return 0;
 }
@@ -48,9 +48,9 @@ int SayAsGroups(char * inbuffer)
 	for (i=0;i<len;i+=5)
 	{
 		strncpy(buffer,&inbuffer[i],5);
-		sprintf(buffer,"sox resources/%c.wav resources/%c.wav resources/%c.wav resources/%c.wav resources/%c.wav resources/silence_1.wav group.wav", buffer[0],buffer[1],buffer[2],buffer[3],buffer[4]);
+		sprintf(buffer,"sox resources/%c.wav resources/%c.wav resources/%c.wav resources/%c.wav resources/%c.wav resources/silence_1.wav temp.wav", buffer[0],buffer[1],buffer[2],buffer[3],buffer[4]);
 		system(buffer);
-		if(do_sound) system("aplay -q group.wav");
+		if(do_sound) system("aplay -q temp.wav");
 	}	
  return 0;
 }
@@ -72,7 +72,7 @@ int MakeDTGFile(void)
 	mytime = gmtime(&mysecs);
 
 	strftime(tbuffer, 20, "%d%H%M", mytime);
-	sprintf(buffer,"sox resources/timeis.wav resources/%c.wav resources/%c.wav resources/%c.wav resources/%c.wav resources/%c.wav resources/%c.wav resources/silence_1.wav dtg.wav", tbuffer[0],tbuffer[1],tbuffer[2],tbuffer[3],tbuffer[4],tbuffer[5]);
+	sprintf(buffer,"sox resources/timeis.wav resources/%c.wav resources/%c.wav resources/%c.wav resources/%c.wav resources/%c.wav resources/%c.wav resources/silence_1.wav temp.wav", tbuffer[0],tbuffer[1],tbuffer[2],tbuffer[3],tbuffer[4],tbuffer[5]);
 	system(buffer);
 	
  return 0;
@@ -95,7 +95,7 @@ int ProcessLine(char * line)
 		case 'D':
 		  cout << "---- Saying DTG" << endl; 
 		  MakeDTGFile();
-	      if(do_sound) system("aplay -q dtg.wav");
+	      if(do_sound) system("aplay -q temp.wav");
 		  break;
 
 		case 'G':
@@ -120,7 +120,7 @@ int ProcessLine(char * line)
 		case 'T':
 		  cout << "---- Saying Time" << endl; 
 		  MakeTimeFile();
-	      if(do_sound) system("aplay -q nowtime.wav");
+	      if(do_sound) system("aplay -q temp.wav");
 		  break;
 
 

@@ -26,11 +26,11 @@ int Say5Numbers(void)
       rbuffer[i] +=48;
     }
 	
-	sprintf(buffer,"sox resources/%c.wav resources/%c.wav resources/%c.wav resources/%c.wav resources/%c.wav resources/silence_1.wav numbers.wav", rbuffer[0],rbuffer[1],rbuffer[2],rbuffer[3],rbuffer[4]);
+	sprintf(buffer,"sox resources/%c.wav resources/%c.wav resources/%c.wav resources/%c.wav resources/%c.wav resources/silence_1.wav temp.wav", rbuffer[0],rbuffer[1],rbuffer[2],rbuffer[3],rbuffer[4]);
 //    cout << buffer << endl; 
 
 	system(buffer);
-	if(do_sound) system("aplay -q numbers.wav");
+	if(do_sound) system("aplay -q temp.wav");
 	return 0;
 }
 
