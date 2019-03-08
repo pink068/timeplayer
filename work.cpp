@@ -14,19 +14,23 @@
 using namespace std;
 
 
-int MakeTimeFile(void)
+int Say5Numbers(void)
 {
-	// get current time
-	// convert to wav
-	struct tm * mytime;
-	time_t mysecs;
 	char buffer[200];
+	char rbuffer[20];
+	int i;
 	
-	mysecs = time(NULL);
-	mytime = gmtime(&mysecs);
-	sprintf(buffer, "echo \"%2d %02d and %2d seconds\" |text2wave -o resources/nowtime.wav",mytime->tm_hour, mytime->tm_min, mytime->tm_sec);
-	system(buffer);	
- return 0;
-}
+	for( i = 0; i<5; i++)
+	{
+      rbuffer[i] = rand()%10;
+      rbuffer[i] +=48;
+    }
+	
+	sprintf(buffer,"sox resources/%c.wav resources/%c.wav resources/%c.wav resources/%c.wav resources/%c.wav resources/silence_1.wav numbers.wav", rbuffer[0],rbuffer[1],rbuffer[2],rbuffer[3],rbuffer[4]);
+//    cout << buffer << endl; 
 
+	system(buffer);
+	if(do_sound) system("aplay -q numbers.wav");
+	return 0;
+}
 

@@ -11,7 +11,7 @@
 
 using namespace std;
 bool live_hardware = false;
-bool do_sound=false;
+bool do_sound=true;
 
 
 
@@ -52,6 +52,7 @@ int main(int argc, char *argv[])
       // already checked this minute
       //       putchar('.');
         sleep(1);
+        Say5Numbers();
       }
       else
       {

@@ -11,7 +11,7 @@ int Playsound(int );
 bool fileExists(const char* file);
 
 int SayAsGroups(char *);
-
+int Say5Numbers(void);
 
 extern bool live_hardware ;
 extern bool do_sound;
