@@ -3,9 +3,9 @@ Another version of
 Numbers station transmission generator.<br />
 Designed to be a radio beacon controller which sends voice messages, as wav, at the correct times through the day.<br />
 loads of work still to do.<br />
-dependencies: make g++ libttspico-utils libsqlite3-dev libhamlib-dev libcurl4-openssl-dev alsamixer<br />
-To get the files just type git clone https://github.com/pink068/TimePlayer<br/>
-Then cd into the TimePlayer Folder<br/>
+dependencies: make g++ libttspico-utils libsqlite3-dev libhamlib-dev libcurl4-openssl-dev alsamixer festival<br />
+To get the files just type git clone https://github.com/pink068/timeplayer<br/>
+Then cd into the timeplayer Folder<br/>
 To build it just type make.<br />
 To run it just type ./run<br /><br />
 It plays a specific wav file at the specific time. EG plays 2110.wav at ten past nine in the evening. <br/>
