@@ -15,9 +15,20 @@ or run other commands. See below.
 <br />
 One commnd on each line of the text file.<br/>
 if the text starts with a;<br />
+C send the callsign e.g. C<br />
+D Send the time as a date time group  e.g. D<br /><br />
+G Send following test as groups of 5 phonetics   e.g. Gabcdefghij
 F set transmitter frequency to n, e.g.  F5.750 sets it to 5.750MHz<br />
 P set transmitter power to n, e.g. P50 sets the transmitter to 50 watts.<br />
-D Send the time as a date time group
-C send the callsign
+S speak the following text e.g. Sthis is a message<br />
 <br />
 
+Example file<br />
+.........................<br />
+F5.750<br />
+P50<br />
+C<br />
+D<br />
+Gabcdefghij<br />
+Sthis is a message<br />
+.........................<br />

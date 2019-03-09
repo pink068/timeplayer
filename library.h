@@ -12,6 +12,7 @@ bool fileExists(const char* file);
 
 int SayAsGroups(char *);
 int Say5Numbers(void);
+int Say(char * );
 
 extern bool live_hardware ;
 extern bool do_sound;

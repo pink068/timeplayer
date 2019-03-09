@@ -13,6 +13,33 @@
 
 using namespace std;
 
+
+
+int Say5Numbers(void)
+{
+	char buffer[200];
+	char rbuffer[20];
+	int i;
+	
+	for( i = 0; i<5; i++)
+	{
+      rbuffer[i] = rand()%10;
+      rbuffer[i] +=48;
+    }
+	
+	sprintf(buffer,"sox resources/%c.wav resources/%c.wav resources/%c.wav resources/%c.wav resources/%c.wav resources/silence_1.wav temp.wav", rbuffer[0],rbuffer[1],rbuffer[2],rbuffer[3],rbuffer[4]);
+//    cout << buffer << endl; 
+
+	system(buffer);
+	if(do_sound) system("aplay -q temp.wav");
+	return 0;
+}
+
+
+
+
+
+
 int MakeTimeFile(void)
 {
 	// get current time
@@ -82,8 +109,8 @@ int MakeDTGFile(void)
 
 int ProcessLine(char * line)
 {
-	char localbuffer[2000];
-    strncpy(localbuffer,&line[1],20);	
+	char localbuffer[2100];
+    strncpy(localbuffer,&line[1],2000);	
 	
 	switch (line[0])
 	{
@@ -114,6 +141,12 @@ int ProcessLine(char * line)
 		  cout << "---- Changing Power "; 
 		  cout << localbuffer << endl;
           if(live_hardware)   Rig.Command( RADIO_POWER, localbuffer);
+		  break;
+
+		case 'S':
+		  cout << "---- Saying Text" << endl; 
+		  Say(localbuffer);
+	      if(do_sound) system("aplay -q temp.wav");
 		  break;
 
 
