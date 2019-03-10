@@ -36,7 +36,13 @@ int main(int argc, char *argv[])
         exit(0);
 	}
   
-    if(live_hardware) Rig.Initialise();
+    if(live_hardware)
+    {
+		Rig.Initialise();
+		Rig.Command( RADIO_FREQ, (char*)"5.245");
+		Rig.Command( RADIO_POWER, (char*) "0");
+		ProcessFile(2500);
+	}
 
 
     while(1)

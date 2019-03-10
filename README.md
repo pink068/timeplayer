@@ -12,6 +12,9 @@ It plays a specific wav file at the specific time. EG plays 2110.wav at ten past
 Before playing the wav is runs a script file, if it exists, to set the transmitter frequency and power <br/> 
 or run other commands. See below.
 
+On startup the program will set the radio to a defualt frequency and power, <br/>
+then look for 2500.txt to set the local startup settings<br />
+
 <br />
 One commnd on each line of the text file.<br/>
 if the text starts with a;<br />
