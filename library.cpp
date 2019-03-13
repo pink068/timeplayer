@@ -14,6 +14,15 @@
 using namespace std;
 
 
+int Say (char * inbuffer)
+{
+	char buffer[2000];
+	sprintf(buffer, "echo \"%s\" |pico2wave -l=\"en-GB\" -wtemp.wav",inbuffer);
+//	cout << buffer << endl; 
+	system(buffer);	
+	return 0;
+}
+
 
 int Say5Numbers(void)
 {
@@ -136,11 +145,34 @@ int ProcessLine(char * line)
 		  cout << localbuffer << endl;
           if(live_hardware)   Rig.Command( RADIO_FREQ, localbuffer);
           break;
+
+		case 'N':
+		  if( strcmp(localbuffer,"on")==0)
+		  {
+			  // if "Non" enable numbers anything else turns it off
+		      cout << "---- Setting Number Mode ON" << endl; 
+			  saynumbers=true;
+		  }
+		  else
+		  {
+			  saynumbers=false;			  
+		      cout << "---- Setting Number Mode ON" << endl; 
+		  }
+		  break;
+
 	  
 		case 'P':
+		  strncpy(power,localbuffer,4);
 		  cout << "---- Changing Power "; 
 		  cout << localbuffer << endl;
+		  
           if(live_hardware)   Rig.Command( RADIO_POWER, localbuffer);
+		  break;
+
+		case 'R':
+		  cout << "---- Reporting Power" << endl; 
+		  MakePowerFile();
+	      if(do_sound) system("aplay -q temp.wav");
 		  break;
 
 		case 'S':

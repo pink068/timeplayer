@@ -12,8 +12,9 @@
 using namespace std;
 bool live_hardware = false;
 bool do_sound=true;
-
-
+bool saynumbers=false;
+bool station_heard=false;
+char power[6];
 
 RadioControl Rig;
 
@@ -25,6 +26,8 @@ int main(int argc, char *argv[])
   struct tm *tmp;
   int inttime;
   int intlastcheck;
+  int counter;
+  counter =0;
   
     if(argc>1) 
     {
@@ -36,15 +39,13 @@ int main(int argc, char *argv[])
         exit(0);
 	}
   
+   
     if(live_hardware)
     {
 		Rig.Initialise();
-		Rig.Command( RADIO_FREQ, (char*)"5.245");
-		Rig.Command( RADIO_POWER, (char*) "0");
-		ProcessFile(2500);
 	}
 
-
+	ProcessFile(2500); // set the power up defaults
     while(1)
     {
 
@@ -53,12 +54,26 @@ int main(int argc, char *argv[])
       strftime(entrytime,18,"%H%M",tmp);
       inttime = atoi(entrytime);
 
+	  if( station_heard)
+	  {
+		  // if someone spoke then go quiet for a minute
+		counter = -55;
+		do_sound=false;
+	  }
+	  
       if(inttime == intlastcheck)
       {
       // already checked this minute
       //       putchar('.');
         sleep(1);
-        Say5Numbers();
+        counter++;
+		cout << counter <<":" <<saynumbers <<endl;
+        if(saynumbers==true && counter >4) 
+        {
+			Say5Numbers();
+			counter =0;
+		}
+
       }
       else
       {

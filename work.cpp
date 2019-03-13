@@ -13,11 +13,10 @@
 
 using namespace std;
 
-int Say (char * inbuffer)
+int MakePowerFile(void)
 {
-	char buffer[2000];
-	sprintf(buffer, "echo \"%s\" |text2wave -o temp.wav",inbuffer);
-	cout << buffer << endl; 
+	char buffer[200];
+	sprintf(buffer,"sox resources/p.wav resources/%c.wav resources/%c.wav resources/silence_1.wav temp.wav", power[0],power[1]);
 	system(buffer);	
-	return 0;
+ return 0;
 }
