@@ -70,6 +70,7 @@ int main(int argc, char *argv[])
 		cout << counter <<":" <<saynumbers <<endl;
         if(saynumbers==true && counter >4) 
         {
+			do_sound=true;
 			Say5Numbers();
 			counter =0;
 		}
