@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
       // already checked this minute
         sleep(1); // wait a second
         counter++;   // count up by 1
-		cout << counter <<":" <<saynumbers <<endl;
+//		cout << counter <<":" <<saynumbers <<endl;
         if(saynumbers==true && counter >4) // if 5 seconds passed then say a numbers group, if rquired.
         {
 

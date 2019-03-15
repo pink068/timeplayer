@@ -1,10 +1,10 @@
 int ProcessFile(int );
 int Playsound(int );
 bool fileExists(const char* file);
-int MakeTimeFile(void);
+int SayTime(void);
 int WriteToFile(char * buffer, char * filename);
-int MakeDTGFile(void);
-int MakePowerFile(void);
+int SayDTG(void);
+int SayPower(void);
 int ProcessScript(char * filename);
 int ProcessLine(char * line);
 int ProcessFile(int );
