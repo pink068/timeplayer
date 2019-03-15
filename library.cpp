@@ -12,19 +12,30 @@
 #include <time.h>
 
 using namespace std;
+int PlayFile(string filename);
 
-
-int Say (char * inbuffer)
+int PlayFile(string filename)
 {
-	char buffer[2000];
-	sprintf(buffer, "echo \"%s\" |pico2wave -l=\"en-GB\" -wtemp.wav",inbuffer);
-//	cout << buffer << endl; 
-	system(buffer);	
+	char buffer[100];
+	sprintf(buffer, "aplay -q %s",(char*)filename.c_str());
+ 	if(do_sound) system(buffer);
 	return 0;
 }
 
 
-int Say5Numbers(void)
+
+int Say (char * inbuffer)
+{ // say a phrase that we dont have prepared as a wav.
+	char buffer[2000];
+	sprintf(buffer, "echo \"%s\" |pico2wave -l=\"en-GB\" -wtemp.wav",inbuffer);
+//	cout << buffer << endl; 
+	system(buffer);
+    PlayFile("temp.wav");	
+	return 0;
+}
+
+
+int Say5Numbers(void)// say a random 5 number sequence, 
 {
 	char buffer[200];
 	char rbuffer[20];
@@ -36,21 +47,29 @@ int Say5Numbers(void)
       rbuffer[i] +=48;
     }
 	
-	sprintf(buffer,"sox resources/%c.wav resources/%c.wav resources/%c.wav resources/%c.wav resources/%c.wav resources/silence_1.wav temp.wav", rbuffer[0],rbuffer[1],rbuffer[2],rbuffer[3],rbuffer[4]);
-//    cout << buffer << endl; 
-
+	sprintf(buffer,"sox resources/%c.wav resources/%c.wav resources/%c.wav resources/%c.wav resources/%c.wav resources/silence_1.wav temp.wav", 
+	               rbuffer[0],rbuffer[1],rbuffer[2],rbuffer[3],rbuffer[4]);
 	system(buffer);
-	if(do_sound) system("aplay -q temp.wav");
+	PlayFile("temp.wav");
 	return 0;
 }
 
 
 
-
-
-
-int MakeTimeFile(void)
+int SayPower(void)
 {
+	char buffer[200];
+	sprintf(buffer,"sox resources/p.wav resources/%c.wav resources/%c.wav resources/silence_1.wav temp.wav", power[0],power[1]);
+	system(buffer);	
+	PlayFile("temp.wav");
+ return 0;
+}
+
+
+
+
+int SayTime(void)   // create a wav of the current time.
+{                        // this is low quality voice
 	// get current time
 	// convert to wav
 	struct tm * mytime;
@@ -59,15 +78,16 @@ int MakeTimeFile(void)
 	
 	mysecs = time(NULL);
 	mytime = gmtime(&mysecs);
-	sprintf(buffer, "echo \"%2d %02d and %2d seconds\" |text2wave -o temp.wav",mytime->tm_hour, mytime->tm_min, mytime->tm_sec);
+	sprintf(buffer, "echo \"%2d %02d and %2d seconds\" |pico2wave -l=\"en-GB\" -wtemp.wav",mytime->tm_hour, mytime->tm_min, mytime->tm_sec);
 	system(buffer);	
+	PlayFile("temp.wav");
  return 0;
 }
 
 
 
-int SayAsGroups(char * inbuffer)
-{
+int SayAsGroups(char * inbuffer)  // take a variable length string of letters and say as phonetics in groups of 5
+{                                 // padded with z
 	// get current time
 	// convert to wav
 	char buffer[200];
@@ -77,6 +97,9 @@ int SayAsGroups(char * inbuffer)
 	for(int i = 0; inbuffer[i]; i++)
 	{
       inbuffer[i] = tolower(inbuffer[i]);
+	  if(inbuffer[i]<'a') inbuffer[i]='a';
+	  if(inbuffer[i]>'z') inbuffer[i]='z';
+	  
     }
 	
 	len = strlen(inbuffer);
@@ -86,7 +109,7 @@ int SayAsGroups(char * inbuffer)
 		strncpy(buffer,&inbuffer[i],5);
 		sprintf(buffer,"sox resources/%c.wav resources/%c.wav resources/%c.wav resources/%c.wav resources/%c.wav resources/silence_1.wav temp.wav", buffer[0],buffer[1],buffer[2],buffer[3],buffer[4]);
 		system(buffer);
-		if(do_sound) system("aplay -q temp.wav");
+		PlayFile("temp.wav");
 	}	
  return 0;
 }
@@ -95,7 +118,7 @@ int SayAsGroups(char * inbuffer)
 
 
 
-int MakeDTGFile(void)
+int SayDTG(void) // makes a standard 6 number DTG wav file in the good voice.
 {
 	// get current time
 	// convert to wav
@@ -110,13 +133,13 @@ int MakeDTGFile(void)
 	strftime(tbuffer, 20, "%d%H%M", mytime);
 	sprintf(buffer,"sox resources/timeis.wav resources/%c.wav resources/%c.wav resources/%c.wav resources/%c.wav resources/%c.wav resources/%c.wav resources/silence_1.wav temp.wav", tbuffer[0],tbuffer[1],tbuffer[2],tbuffer[3],tbuffer[4],tbuffer[5]);
 	system(buffer);
-	
+	PlayFile("temp.wav");
  return 0;
 }
 
 
 
-int ProcessLine(char * line)
+int ProcessLine(char * line)  // process the line of script passed in
 {
 	char localbuffer[2100];
     strncpy(localbuffer,&line[1],2000);	
@@ -125,13 +148,12 @@ int ProcessLine(char * line)
 	{
 		case 'C':
 		  cout << "---- Saying Callsign" << endl; 
-	      if(do_sound) system("aplay -q wavs/callsign.wav");
+	      PlayFile("wavs/callsign.wav");
 		  break;
 
 		case 'D':
 		  cout << "---- Saying DTG" << endl; 
-		  MakeDTGFile();
-	      if(do_sound) system("aplay -q temp.wav");
+		  SayDTG();
 		  break;
 
 		case 'G':
@@ -171,21 +193,18 @@ int ProcessLine(char * line)
 
 		case 'R':
 		  cout << "---- Reporting Power" << endl; 
-		  MakePowerFile();
-	      if(do_sound) system("aplay -q temp.wav");
+		  SayPower();
 		  break;
 
 		case 'S':
 		  cout << "---- Saying Text" << endl; 
 		  Say(localbuffer);
-	      if(do_sound) system("aplay -q temp.wav");
 		  break;
 
 
 		case 'T':
 		  cout << "---- Saying Time" << endl; 
-		  MakeTimeFile();
-	      if(do_sound) system("aplay -q temp.wav");
+		  SayTime();
 		  break;
 
 
@@ -207,8 +226,8 @@ int ProcessLine(char * line)
 
 
 
-int ProcessScript(char * filename)
-{
+int ProcessScript(char * filename) // read a script file , base on time input, 
+{                                  // and send each line for processing
 	// open the file
 	// read a line
 	// process the line
@@ -233,7 +252,7 @@ int ProcessScript(char * filename)
 
 
 
-int ProcessFile(int entrytime)
+int ProcessFile(int entrytime)  // check to see if script exists and send for processing
 {
   char filename[20];
  // printf("%04d Running commands\n",entrytime);
@@ -263,7 +282,7 @@ int ProcessFile(int entrytime)
  
 
 
-int Playsound(int entrytime)
+int Playsound(int entrytime) // check for sound existing and play if it does.
 {
   char filename[20];
   char commandbuffer[100];
@@ -304,14 +323,5 @@ bool fileExists(const char* file) {
     return (stat(file, &buf) == 0);
 }
 
-
-int WriteToFile(char * buffer, char * filename)
-{
-	ofstream myfile;
-	myfile.open (filename);
-    myfile << buffer;
-    myfile.close();
-    return 0;	
-}
 
 
