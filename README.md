@@ -23,7 +23,7 @@ D Send the time as a date time group  e.g. D<br />
 G Send following text as groups of 5 phonetics   e.g. Gabcdefghij<br />
 F set transmitter frequency,  e.g.  F5.750 sets it to 5.750MHz<br />
 P set transmitter power, e.g. P50 sets the transmitter to 50 watts.<br />
-R speak the transmitter power.
+R speak the transmitter power.<br/>
 S speak the following text e.g. Sthis is a message<br />
 <br />
 
