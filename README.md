@@ -3,7 +3,7 @@ Another version of
 Numbers station transmission generator.<br />
 Designed to be a radio beacon controller which sends voice messages, as wav, at the correct times through the day.<br />
 loads of work still to do.<br />
-dependencies: make g++ libhamlib-dev alsamixer alsa-utils sox<br />
+dependencies: make g++ libhamlib-dev alsa-utils sox<br />
 To get the files just type git clone https://github.com/pink068/timeplayer<br/>
 Then cd into the timeplayer Folder<br/>
 To build it just type make.<br />
